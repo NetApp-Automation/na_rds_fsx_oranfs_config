@@ -1,0 +1,44 @@
+# Make required changes for SnapCenter
+- block:
+    - name: Enable ssh login for ec2-user - uncomment pwd yes
+      ansible.builtin.replace:
+        path: /etc/ssh/sshd_config
+        regexp: '#PasswordAuthentication yes'
+        replace: 'PasswordAuthentication yes'
+      become: true
+      tags:
+        - enable_ssh_pwd
+
+    - name: Enable ssh login for ec2-user - comment out pwd no
+      ansible.builtin.replace:
+        path: /etc/ssh/sshd_config
+        regexp: 'PasswordAuthentication no'
+        replace: '#PasswordAuthentication no'
+      become: true
+      tags:
+        - enable_ssh_pwd
+
+    - name: Restart sshd service
+      ansible.builtin.service:
+        name: sshd
+        state: restarted
+      become: true
+      tags:
+        - restart_sshd
+     
+    - name: Install packages
+      yum:
+        name: "{{ item }}"
+      become: true
+      with_items:
+        - '{{ packages }}'
+      tags:
+        - install_pkgs
+
+    - name: Reset ec2-user pwd
+      user:
+        name: ec2-user
+        password: "{{ ec2_usrpwd | password_hash('sha512') }}"
+      become: true
+      tags:
+        - reset_ec2_user_pwd

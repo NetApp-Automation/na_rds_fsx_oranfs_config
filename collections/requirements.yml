@@ -1,0 +1,4 @@
+---
+collections:
+  - netapp.ontap
+  - community.general

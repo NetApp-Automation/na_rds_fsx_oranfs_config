@@ -1,0 +1,29 @@
+# Verify whether NFS shares have been mounted correctly!
+- block:
+    - name: Retrieve NFS Mounts
+      command: nfsstat --mounts
+      become: true
+      register: result
+      tags:
+        - verify_nfs_mounts
+
+    - name: Validate NFS mounts
+      fail:
+        msg: NFS shares not mounted correctly!
+      when: '"/{{ item }} from {{ svm_mgmt_nfs_lif }}:/{{ item }}" not in result.stdout'
+      with_items:
+        - "{{ ora_volumes_nfs }}"
+      tags:
+        - verify_nfs_mounts
+
+    - name: Change ownership of mount points to rdsdb user
+      ansible.builtin.file:
+        path: "/{{ item }}"
+        owner: rdsdb
+        group: rdsdb
+        mode: '0755'
+      become: true
+      with_items:
+        - "{{ ora_volumes_nfs }}"
+      tags:
+        - chg_owner

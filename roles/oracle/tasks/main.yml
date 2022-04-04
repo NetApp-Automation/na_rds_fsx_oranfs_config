@@ -1,0 +1,17 @@
+---
+# ----------------------------------------------------------------------------------------------------------------------
+# DB software only installation tasks block
+# Execute 19.3 base install and applied 19.8 patch in single installation
+# ----------------------------------------------------------------------------------------------------------------------
+- block:
+    - name: Relocate RDS Oracle database from EBS to FSx ONTAP
+      include_tasks: oracle_relocate_dnfs.yml
+      tags:
+        - gen_db_init_param
+        - cre_db_dirs
+        - gen_move_script
+        - exe_move_script
+        - gen_rename_script
+        - exe_rename_script
+        - ena_dnfs
+        - rds_db_move

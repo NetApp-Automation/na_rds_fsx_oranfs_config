@@ -1,0 +1,21 @@
+---
+##########################################################
+### DB default installation and configuraton variables ###
+##########################################################
+
+# Oracle user setting
+oracle_user: rdsdb
+oracle_install_group: rdsdb
+oracle_home: /rdsdbbin/oracle
+
+# Set Oracle version
+ora_version: 19c
+
+# Oracle directories
+script_dir: /tmp
+pfile_dir: "/rdsdbdata/admin/{{ db_name }}/pfile"
+db_dirs:
+  - '/{{ ora_volumes_nfs[1] }}/db/{{ db_unique_name }}/arch'
+  - '/{{ ora_volumes_nfs[0] }}/db/{{ db_unique_name }}/controlfile'
+  - '/{{ ora_volumes_nfs[0] }}/db/{{ db_unique_name }}/datafile'
+  - '/{{ ora_volumes_nfs[0] }}/db/{{ db_unique_name }}/onlinelog'

@@ -1,0 +1,29 @@
+*.archive_lag_target=300
+*.audit_file_dest='/rdsdbdata/admin/{{ db_name }}/adump'
+*.compatible='19.0.0'
+*.control_files='/{{ ora_volumes_nfs[0] }}/db/{{ db_name }}_A/controlfile/control-01.ctl'
+*.db_block_checking='MEDIUM'
+*.db_create_file_dest='/{{ ora_volumes_nfs[0] }}/db'
+*.db_name='{{ db_name }}'
+*.db_recovery_file_dest_size=1073741824
+*.db_unique_name='{{ db_name }}_A'
+*.dbfips_140=FALSE
+*.dg_broker_config_file1='/rdsdbdata/config/dr1{{ db_name }}.dat'
+*.dg_broker_config_file2='/rdsdbdata/config/dr2{{ db_name }}.dat'
+*.diagnostic_dest='/rdsdbdata/log'
+*.filesystemio_options='setall'
+*.heat_map='OFF'
+*.job_queue_processes=50
+*.local_listener='(address=(protocol=tcp)(host=)(port=1521))'
+*.log_archive_dest_1='location="/{{ ora_volumes_nfs[1] }}/db/{{ db_name }}_A/arch/redolog", valid_for=(ALL_LOGFILES,ALL_ROLES)'
+*.log_archive_format='-%s-%t-%r.arc'
+*.max_string_size='STANDARD'
+*.memory_max_target=12373459968
+*.memory_target=12373459968
+*.open_cursors=300
+*.pga_aggregate_target=0
+*.processes=1671
+*.recyclebin='OFF'
+*.sga_target=0
+*.undo_tablespace='UNDO_T1'
+*.use_large_pages='FALSE'

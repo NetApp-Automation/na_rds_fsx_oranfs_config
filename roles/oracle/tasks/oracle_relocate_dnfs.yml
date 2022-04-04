@@ -1,0 +1,97 @@
+---
+# ----------------------------------------------------------------------------------------------------------------------
+# This block of tasks execute Oracle RDS relocation from EBS storage to FSx storage as well as enabling Oracle dnfs
+# while RDS automation is paused.
+# ----------------------------------------------------------------------------------------------------------------------
+- block:
+    - name: Generate database init file based standard Oracle RDS init parameter
+      ansible.builtin.template:
+        src: "rds_init.{{ ora_version }}"
+        dest: "{{ pfile_dir }}/init{{ db_name }}.ora"
+      become: true
+      become_user: '{{ oracle_user }}'
+      tags:
+        - gen_db_init_param
+
+    - name: Create folders for RDS database on FSx mount  
+      ansible.builtin.file:
+        state: directory
+        path: '{{ item }}'
+        owner: '{{ oracle_user }}'
+        group: '{{ oracle_install_group }}'
+        mode: 0755
+      become: true
+      become_user: '{{ oracle_user }}'
+      with_items:
+        - '{{ db_dirs }}'
+      tags:
+        - cre_db_dirs
+
+    - name: Generate db file move script to target RDS Oracle instance 
+      ansible.builtin.template:
+        src: ora_file_move.sh 
+        dest: '{{ script_dir }}'
+        owner: '{{ oracle_user }}'
+        group: '{{ oracle_install_group }}'
+        mode: 0755
+      become: true
+      tags:
+        - gen_move_script
+
+    - name: Shutdown RDS DB and move db files to FSx storage 
+      shell: "{{ script_dir }}/ora_file_move.sh"
+      become: true
+      become_user: '{{ oracle_user }}'
+      tags:
+        - exe_move_script
+
+    - name: Enable oracle dNFS - create odm dir
+      file:
+        state: directory
+        path: "{{ oracle_home }}/rdbms/lib/odm"
+        owner: '{{ oracle_user }}'
+        group: '{{ oracle_install_group }}'
+        mode: 0755
+      become: true
+      tags:
+        - ena_dnfs
+
+    - name: Enable oracle dnfs - Copy nfsodm lib file to odm directory
+      ansible.builtin.copy:
+        src: "{{ oracle_home }}/lib/libnfsodm19.so"
+        dest: "{{ oracle_home }}/rdbms/lib/odm"
+        remote_src: true
+      become: true
+      become_user: '{{ oracle_user }}'
+      tags:
+        - ena_dnfs
+
+    - name: Change oradism ownership, group and permissions
+      ansible.builtin.file:
+        path: "{{ oracle_home }}/bin/oradism"
+        owner: root
+        group: rdsdb
+        mode: '4750'
+      become: true
+      tags:
+        - ena_dnfs
+
+    - name: Generate db file rename script to target RDS Oracle instance
+      ansible.builtin.template:
+        src: ora_file_rename.sh
+        dest: '{{ script_dir }}'
+        owner: '{{ oracle_user }}'
+        group: '{{ oracle_install_group }}'
+        mode: 0755
+      become: true
+      tags:
+        - gen_rename_script
+
+    - name: Mount RDS DB, rename data files and open DB
+      shell: "{{ script_dir }}/ora_file_rename.sh"
+      become: true
+      become_user: '{{ oracle_user }}'
+      tags:
+        - exe_rename_script
+  tags:
+    - rds_db_move

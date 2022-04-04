@@ -1,0 +1,7 @@
+#ONTAP Host
+[ontap]
+10.10.10.10
+
+#Oracle hosts
+[oracle]
+10.0.0.219

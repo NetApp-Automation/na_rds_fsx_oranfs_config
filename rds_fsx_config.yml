@@ -1,0 +1,40 @@
+---
+- name: Install requirements for running the playbooks
+  hosts: oracle
+  connection: local
+  gather_facts: False
+  tasks:
+    - name: Install python libraries
+      pip:
+        name:
+          - netapp-lib
+          - xmltodict
+          - jmespath
+  tags:
+    - requirements_config
+
+- name: RDS Linux setup and FSx storage config for Oracle
+  hosts: oracle
+  gather_facts: True
+  vars_files:
+    - roles/linux/defaults/main.yml
+  vars_prompt:
+    - name: ec2_usrpwd
+      prompt: Enter new ec2-user password for RDS host
+      unsafe: yes
+      private: yes
+  roles:
+    - role: linux
+  tags:
+    - linux_config
+
+- name: RDS Oracle configuration for FSx
+  hosts: oracle
+  gather_facts: True
+  vars_files:
+    - roles/oracle/defaults/main.yml
+    - roles/linux/defaults/main.yml
+  roles:
+    - role: oracle
+  tags:
+    - oracle_config

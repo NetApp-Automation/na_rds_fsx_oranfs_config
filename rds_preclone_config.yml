@@ -1,0 +1,46 @@
+---
+- name: Install requirements for running the playbooks
+  hosts: oracle
+  connection: local
+  gather_facts: False
+  tasks:
+    - name: Install python libraries
+      pip:
+        name:
+          - netapp-lib
+          - xmltodict
+          - jmespath
+  tags:
+    - requirements_config
+
+- name: RDS Oracle Linux preclone setup for SnapCenter
+  hosts: oracle
+  gather_facts: True
+  vars_files:
+    - roles/linux/defaults/main.yml
+  vars_prompt:
+    - name: ec2_usrpwd
+      prompt: Enter new ec2-user password for RDS host
+      unsafe: yes
+      private: yes
+  tasks:
+    - name: Call SnapCenter setup tasks
+      include_role:
+        name: linux
+        tasks_from: snapctr_setup.yml
+  tags:
+    - linux_config
+
+- name: RDS Oracle preclone configuration
+  hosts: oracle
+  gather_facts: True
+  vars_files:
+    - roles/oracle/defaults/main.yml
+    - roles/linux/defaults/main.yml
+  tasks:
+    - name: Call DB drop tasks
+      include_role:
+        name: oracle
+        tasks_from: ora_drop.yml
+  tags:
+    - oracle_config

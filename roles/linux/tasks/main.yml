@@ -1,0 +1,32 @@
+---
+# ----------------------------------------------------------------------------------------------------------------------
+# Configure RDS host kernel for FSx storage
+# Enable ssh pwd login and installed required packages
+# ----------------------------------------------------------------------------------------------------------------------
+- block:
+    - name: Setup RDS kernel for FSx storage and SnapCenter backup/recovery
+      include_tasks: snapctr_setup.yml
+      tags: 
+        - enable_ssh_pwd
+        - restart_sshd
+        - install_pkgs
+        - reset_ec2_user_pwd
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Create mount points for NFS file systems
+# Mount NFS file systems on Oracle hosts
+# ----------------------------------------------------------------------------------------------------------------------
+    - name: Create mount points for NFS file systems / Mount NFS file systems on Oracle hosts
+      include_tasks: mount_points.yml
+      tags:
+        - cre_mount_points
+        - mount_nfs_volumes
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Check mount points for NFS file system
+# ----------------------------------------------------------------------------------------------------------------------
+    - name: Verify NFS Mounts
+      include_tasks: verify_mounts.yml
+      tags:
+        - verify_nfs_mounts
+        - chg_owner

@@ -1,0 +1,7 @@
+#############################################
+### Linux default configuration variables ###
+#############################################
+# Default Linux variables user do not need to change. All user changable variables are in fsx_vars.yml
+packages:
+  - nfs-utils
+  - java-1.8.0-openjdk.x86_64

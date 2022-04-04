@@ -1,0 +1,32 @@
+---
+# ----------------------------------------------------------------------------------------------------------------------
+# This block of tasks execute Oracle RDS relocation from EBS storage to FSx storage as well as enabling Oracle dnfs
+# while RDS automation is paused.
+# ----------------------------------------------------------------------------------------------------------------------
+- block:
+    - name: Generate db drop script to target RDS Oracle host
+      ansible.builtin.template:
+        src: ora_drop.sh
+        dest: '{{ script_dir }}'
+        owner: '{{ oracle_user }}'
+        group: '{{ oracle_install_group }}'
+        mode: 0755
+      become: true
+      tags:
+        - gen_drop_script
+
+    - name: Drop initial RDS Oracle database
+      shell: "{{ script_dir }}/ora_drop.sh"
+      become: true
+      become_user: '{{ oracle_user }}'
+      tags:
+        - exe_drop_script
+
+    - name: Remove DB entry in /etc/oratab file
+      ansible.builtin.lineinfile:
+        path: /etc/oratab
+        state: absent
+        regexp: 'Y:UTC$'
+      become: true
+      tags:
+        - del_db_entry
