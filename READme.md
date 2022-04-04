@@ -77,10 +77,10 @@ Execution Instructions
         
         Fill in the fsx_vars.yml files with relevant environment variables, RDS host access key pair, Oracle RDS host IP address.
     
-    		FSx configuration:
+    	FSx configuration:
         	./rds_fsx_config.sh
         
-        	Preclone configuration:
+        Preclone configuration:
         	./rds_preclone_config.sh
 
 Tags Info
