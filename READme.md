@@ -72,16 +72,20 @@ Execution Instructions
        
     For execution on RDS instance EC2 host or a EC2 Linux host as Ansible controller within VPC
     
-    	Clone the code: git clone https://github.com/NetApp-Automation/na_rds_fsx_oranfs_config.git
+    Clone the code:
+    
+        git clone https://github.com/NetApp-Automation/na_rds_fsx_oranfs_config.git
         cd na_rds_fsx_oranfs_config
         
-        Fill in the fsx_vars.yml files with relevant environment variables, RDS host access key pair, Oracle RDS host IP address.
+    Fill in the fsx_vars.yml files with relevant environment variables, RDS host access key pair, Oracle RDS host IP address.
     
-    	FSx configuration:
-        	./rds_fsx_config.sh
+    FSx configuration:
+    
+      	./rds_fsx_config.sh
         
-        Preclone configuration:
-        	./rds_preclone_config.sh
+	Preclone configuration:
+    
+        ./rds_preclone_config.sh
 
 Tags Info
 ---------
