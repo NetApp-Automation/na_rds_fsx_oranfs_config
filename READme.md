@@ -32,41 +32,42 @@ Variables
 
 For detailed instructions for running the playbook refer to NetAppDocs https://docs.netapp.com/us-en/netapp-solutions/ent-db/aws_rds_ora_custom_deploy_intro.html
 
-######################################################################
-###### Oracle RDS custom configuration for FSx storage var file ######
-###### Consolidate all variables from ontap, linux and oracle   ######
-######################################################################
+    ######################################################################
+    ###### Oracle RDS custom configuration for FSx storage var file ######
+    ###### Consolidate all variables from ontap, linux and oracle   ######
+    ######################################################################
 
-###########################################
-### Ontap env specific config variables ###
-###########################################
+    ###########################################
+    ### Ontap env specific config variables ###
+    ###########################################
 
-# SVM Management LIF and NFS LIF
-svm_mgmt_nfs_lif: 198.19.255.68
+    # SVM Management LIF and NFS LIF
+    svm_mgmt_nfs_lif: 198.19.255.68
 
-# NFS storage volumes when data protocol used is NFS. Volumes names should match with what are created from FSx console
-# ora_nfs_data - Oracle data
-# ora_nfs_log  - Oracle redo
-ora_volumes_nfs:
-  - ora_nfs_data
-  - ora_nfs_log
+    # NFS storage volumes when data protocol used is NFS. Volumes names should match with what are created from FSx console
+    # ora_nfs_data - Oracle data
+    # ora_nfs_log  - Oracle redo
+    ora_volumes_nfs:
+      - ora_nfs_data
+      - ora_nfs_log
 
-###########################################
-### Linux env specific config variables ###
-###########################################
+    ###########################################
+    ### Linux env specific config variables ###
+    ###########################################
 
 
-####################################################
-### DB env specific install and config variables ###
-####################################################
+    ####################################################
+    ### DB env specific install and config variables ###
+    ####################################################
 
-# RDS Database parameters: default DB name ORCL, make change if a new DB name is set during RDS instance provision.
-db_name: NTAP2
-db_unique_name: "{{ db_name }}_A"
+    # RDS Database parameters: default DB name ORCL, make change if a new DB name is set during RDS instance provision.
+    db_name: NTAP2
+    db_unique_name: "{{ db_name }}_A"
 
 
 Execution Instructions
 ---------
+
     Follow the detailed instructions as outlined in https://docs.netapp.com/us-en/netapp-solutions/ent-db/aws_rds_ora_custom_deploy_intro.html
        
     For execution on RDS instance EC2 host or a EC2 Linux host as Ansible controller within VPC
@@ -84,7 +85,9 @@ Execution Instructions
 
 Tags Info
 ---------
-	linux_config: RDS EC2 host kernel configuration
+
+    linux_config: RDS EC2 host kernel configuration
+
     oracle_config: RDS Oracle database configuration
 
 Author Information
