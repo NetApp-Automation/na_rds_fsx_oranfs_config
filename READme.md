@@ -81,11 +81,11 @@ Execution Instructions
     
     FSx configuration:
     
-      	./rds_fsx_config.sh
+		./rds_fsx_config.sh
         
 	Preclone configuration:
     
-        ./rds_preclone_config.sh
+		./rds_preclone_config.sh
 
 Tags Info
 ---------
