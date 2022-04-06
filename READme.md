@@ -76,16 +76,24 @@ Execution Instructions
     
         git clone https://github.com/NetApp-Automation/na_rds_fsx_oranfs_config.git
         cd na_rds_fsx_oranfs_config
-        
+    
+    Install or update prerequsites and Ansible:
+    	
+        sudo yum -y install python3
+        sudo yum -y install python3-pip
+        sudo python3 -m pip install -U pip
+        python3 -W ignore -m pip --disable-pip-version-check install ansible
+        ansible-galaxy collection install netapp.ontap
+    
     Fill in the fsx_vars.yml files with relevant environment variables, RDS host access key pair, Oracle RDS host IP address.
     
     FSx configuration:
     
-		./rds_fsx_config.sh
+		ansible-playbook -i hosts rds_fsx_config.yml -u ec2-user --private-key ora-database-1.pem -e @vars/fsx_vars.yml
         
 	Preclone configuration:
     
-		./rds_preclone_config.sh
+		ansible-playbook -i hosts rds_preclone_config.yml -u ec2-user --private-key ora-database-1.pem -e @vars/fsx_vars.yml
 
 Tags Info
 ---------
